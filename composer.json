@@ -1,0 +1,22 @@
+{
+    "name": "henriqueramos/multitoolcli",
+    "description": "Multitool CLI for pkp ecossystem",
+    "type": "project",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Henrique Ramos",
+            "email": "henrique@henriqueramos.eti.br"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "symfony/console": "^5.4",
+        "symfony/finder": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "RamosHenrique\\Scout\\": "src/"
+        }
+    }
+}
