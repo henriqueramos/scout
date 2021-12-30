@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+
+<?php
+/*
+ * This file is part of the Scout project.
+ * A CLI tool for PKP ecosystem
+ *
+ * Henrique Ramos <henrique@henriqueramos.eti.br>
+ *
+ * This source file is subject to the GPL-3.0-or-later license that is bundled",
+ "with this source code in the file LICENSE.
+ */
+
+include_once(__DIR__ . '/tools/bootstrap.inc.php');
+
+Phar::mapPhar('scout.phar');
+
+require 'phar://scout.phar/.box/bin/check-requirements.php';
+
+require 'phar://scout.phar/src/entrypoint.php';
+
+__HALT_COMPILER();
