@@ -4,12 +4,27 @@ declare(strict_types = 1);
 
 namespace RamosHenrique\Scout;
 
-use Symfony\Component\Console\Application as SymfonyApplication;
-
-use RamosHenrique\Scout\Adapters\{
-    LocalCommands,
-    PKPCommands
+/**
+ * Scout namespaces
+ */
+use RamosHenrique\Scout\Adapters\PKPCommands;
+use RamosHenrique\Scout\Commands\{
+    HelloWorld,
+    MaintenanceMode
 };
+use RamosHenrique\Scout\Commands\Roles\RolesList;
+use RamosHenrique\Scout\Commands\Users\{
+    AddUser,
+    CountByRole,
+    DisableUsers,
+    EnableUsers,
+    ListingUsers
+};
+
+/**
+ * Symfony namespaces
+ */
+use Symfony\Component\Console\Application as SymfonyApplication;
 
 class DiscoverCommands extends SymfonyApplication
 {
@@ -19,15 +34,16 @@ class DiscoverCommands extends SymfonyApplication
      */
     public function discoveredCommands(): array
     {
-        $commands = [];
-        $localCommands = new LocalCommands();
-
-        foreach ($localCommands->commandsFolderPath() as $directory) {
-            $commands = array_merge_recursive(
-                $commands,
-                $localCommands->discoveryCommandsWithin($directory)
-            );
-        }
+        $commands = [
+            HelloWorld::class,
+            MaintenanceMode::class,
+            AddUser::class,
+            CountByRole::class,
+            DisableUsers::class,
+            EnableUsers::class,
+            ListingUsers::class,
+            RolesList::class,
+        ];
 
         $pkpCommands = new PKPCommands();
 
