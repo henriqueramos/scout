@@ -9,7 +9,7 @@ namespace RamosHenrique\Scout;
  */
 use RamosHenrique\Scout\Adapters\PKPCommands;
 use RamosHenrique\Scout\Commands\{
-    HelloWorld,
+    Inspire,
     MaintenanceMode
 };
 use RamosHenrique\Scout\Commands\Roles\RolesList;
@@ -35,13 +35,13 @@ class DiscoverCommands extends SymfonyApplication
     public function discoveredCommands(): array
     {
         $commands = [
-            HelloWorld::class,
-            MaintenanceMode::class,
             AddUser::class,
             CountByRole::class,
             DisableUsers::class,
             EnableUsers::class,
+            Inspire::class,
             ListingUsers::class,
+            MaintenanceMode::class,
             RolesList::class,
         ];
 
