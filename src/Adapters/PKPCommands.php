@@ -22,8 +22,8 @@ class PKPCommands implements DiscoverCommand
         // Trying to include the tools/bootstrap.inc.php from PKP ecosystem
         if (@include_once(dirname(__DIR__) . '/tools/bootstrap.inc.php')) {
             $this->setCommandsFolderPath([
-                app()->base_path('lib/pkp/classes/console/Commands'),
-                app()->base_path('classes/console/Commands')
+                app()->basePath('lib/pkp/classes/console/Commands'),
+                app()->basePath('classes/console/Commands')
             ]);
         }
     }
@@ -54,7 +54,7 @@ class PKPCommands implements DiscoverCommand
 
         foreach ($commands as $command) {
             try {
-                $commandPath = $this->parseCommandPath($command, app()->base_path());
+                $commandPath = $this->parseCommandPath($command, app()->basePath());
                 $commandName = $this->buildCommandNamespace($command);
 
                 import($commandPath);

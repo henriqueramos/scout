@@ -26,6 +26,7 @@ LOGO;
         $commands = new DiscoverCommands();
 
         $availableCommands = $commands->discoveredCommands();
+
         foreach ($availableCommands as $command) {
             $this->add((new $command()));
         }

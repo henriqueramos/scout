@@ -104,6 +104,7 @@ class LocalCommands implements DiscoverCommand
             '',
             $this->parseCommandPath($file, $basePath)
         );
+        $className = str_replace('/', '\\', $className);
 
         return str_replace('\Adapters', '', __NAMESPACE__) . '\Commands\\' . ucfirst($className);
     }
