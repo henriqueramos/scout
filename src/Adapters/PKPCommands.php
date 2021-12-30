@@ -7,31 +7,39 @@ namespace RamosHenrique\Scout\Adapters;
 use Exception;
 use SplFileInfo;
 
+/**
+ * Scout namespaces
+ */
+use RamosHenrique\Scout\Interfaces\DiscoverCommand;
+use RamosHenrique\Scout\Traits\IteratingPKPApplication;
+
+/**
+ * Symfony namespaces
+ */
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 
-use RamosHenrique\Scout\Interfaces\DiscoverCommand;
-
 class PKPCommands implements DiscoverCommand
 {
+    use IteratingPKPApplication;
+
     protected $commandsFolders = [];
 
     public function __construct()
     {
-        // Trying to include the tools/bootstrap.inc.php from PKP ecosystem
-        if (@include_once(dirname(__DIR__) . '/tools/bootstrap.inc.php')) {
-            $this->setCommandsFolderPath([
-                app()->basePath('lib/pkp/classes/console/Commands'),
-                app()->basePath('classes/console/Commands')
-            ]);
-        }
+        $this->discoverableApplication();
+
+        $this->setCommandsFolderPath([
+            app()->basePath('lib/pkp/classes/console/Commands'),
+            app()->basePath('classes/console/Commands')
+        ]);
     }
 
     public function discoveryCommandsWithin(string $folder): array
     {
         try {
-            return $this->sanitizeCommandsList((new Finder())->files()->name('*.php')->in($folder));
+            return $this->sanitizeCommandsList((new Finder())->files()->name('*.php')->in($folder), $folder);
         } catch (DirectoryNotFoundException $e) {
             // Keep the processing if directory is not found
             return [];
@@ -55,7 +63,7 @@ class PKPCommands implements DiscoverCommand
         foreach ($commands as $command) {
             try {
                 $commandPath = $this->parseCommandPath($command, app()->basePath());
-                $commandName = $this->buildCommandNamespace($command);
+                $commandName = $this->buildCommandNamespace($command, app()->basePath());
 
                 import($commandPath);
             } catch (Exception $e) {
@@ -66,7 +74,7 @@ class PKPCommands implements DiscoverCommand
                 continue;
             }
 
-            $commandsList[] = $commandName;
+            $commandsList[] = new $commandName();
         }
 
         return array_filter($commandsList);
@@ -101,7 +109,10 @@ class PKPCommands implements DiscoverCommand
         SplFileInfo $file,
         string $basePath = ''
     ): string {
-        return trim(str_replace($basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+        $namespace = trim(str_replace($basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+        $namespace = str_replace('.inc.php', '', $namespace);
+
+        return str_replace(DIRECTORY_SEPARATOR, '.', $namespace);
     }
 
     /**
@@ -116,6 +127,12 @@ class PKPCommands implements DiscoverCommand
         SplFileInfo $file,
         string $basePath = ''
     ): string {
-        return str_replace('.inc.php', '', $file->getFileName());
+        $namespace = trim(str_replace($basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+        $namespace = str_replace('.inc.php', '', $namespace);
+        $namespace = str_replace('lib/pkp/classes/', 'PKP/', $namespace);
+        $namespace = str_replace('classes/', 'APP/', $namespace);
+        $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $namespace);
+
+        return $namespace;
     }
 }
