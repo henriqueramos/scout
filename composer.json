@@ -1,6 +1,6 @@
 {
-    "name": "henriqueramos/multitoolcli",
-    "description": "Multitool CLI for pkp ecossystem",
+    "name": "henriqueramos/scout",
+    "description": "Scout is a CLI tool for PKP ecossystem",
     "type": "project",
     "license": "GPL-3.0-or-later",
     "authors": [
@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "php": ">=7.4",
         "symfony/console": "^5.4",
         "symfony/finder": "^5.4",
         "symfony/filesystem": "^5.4"
